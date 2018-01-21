@@ -1,5 +1,6 @@
 class Customer < ApplicationRecord
   belongs_to :user
+  has_many :projects, dependent: :restrict_with_error
 
   validates :name, presence: true
   validates :address_line, presence: true

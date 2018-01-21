@@ -55,10 +55,15 @@ class CustomersController < ApplicationController
   # DELETE /customers/1
   # DELETE /customers/1.json
   def destroy
-    @customer.destroy
     respond_to do |format|
-      format.html { redirect_to customers_url, notice: 'Customer was successfully destroyed.' }
-      format.json { head :no_content }
+      if @customer.destroy
+        format.html { redirect_to customers_url, notice: 'Customer was successfully destroyed.' }
+        format.json { head :no_content }
+      else
+        message = 'Cannot delete customer with projects! Please delete projects first.'
+        format.html { redirect_to customers_path, alert: message }
+        format.json { render json: { :message => message}, status: :unprocessable_entity}
+      end
     end
   end
 
