@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :activities
   resources :projects
   get 'signup', to: 'users#new', as: 'signup'
   get 'login', to: 'sessions#new', as: 'login'

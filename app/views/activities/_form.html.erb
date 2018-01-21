@@ -1,0 +1,42 @@
+<%= form_with(model: activity, local: true) do |form| %>
+  <% if activity.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(activity.errors.count, "error") %> prohibited this activity from being saved:</h2>
+
+      <ul>
+      <% activity.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :description %>
+    <%= form.text_field :description, id: :activity_description %>
+  </div>
+
+  <div class="field">
+    <%= form.label :project_id %>
+    <%= form.select :project_id,
+                    options_from_collection_for_select(
+                        current_user.projects.order(:name).pluck(:id, :name),
+                        :first, :last,
+                        activity.project.try(:id)
+                    ) %>
+  </div>
+
+  <div class="field">
+    <%= form.label :start_time %>
+    <%= form.datetime_field :start_time, id: :activity_start_time %>
+  </div>
+
+  <div class="field">
+    <%= form.label :end_time %>
+    <%= form.datetime_field :end_time, id: :activity_end_time %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
