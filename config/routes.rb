@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :user_addresses
   resources :activities
   resources :projects
   get 'signup', to: 'users#new', as: 'signup'
