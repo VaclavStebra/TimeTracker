@@ -1,15 +1,16 @@
 class UserAddressesController < ApplicationController
-  before_action :set_user_address, only: [:show, :edit, :update, :destroy]
+  before_action :set_user_address, only: [:edit, :update]
+  before_action :authorize
 
   # GET /user_addresses
   # GET /user_addresses.json
   def index
-    @user_addresses = UserAddress.all
-  end
-
-  # GET /user_addresses/1
-  # GET /user_addresses/1.json
-  def show
+    current_address = current_user.user_addresses.where(:primary => true)
+    if current_address.empty?
+      redirect_to new_user_address_path
+    else
+      redirect_to edit_user_address_path(current_address[0][:id])
+    end
   end
 
   # GET /user_addresses/new
@@ -24,11 +25,12 @@ class UserAddressesController < ApplicationController
   # POST /user_addresses
   # POST /user_addresses.json
   def create
-    @user_address = UserAddress.new(user_address_params)
+    @user_address = current_user.user_addresses.new(user_address_params)
+    @user_address[:primary] = true
 
     respond_to do |format|
       if @user_address.save
-        format.html { redirect_to @user_address, notice: 'User address was successfully created.' }
+        format.html { redirect_to activities_path, notice: 'User address was successfully created.' }
         format.json { render :show, status: :created, location: @user_address }
       else
         format.html { render :new }
@@ -40,24 +42,20 @@ class UserAddressesController < ApplicationController
   # PATCH/PUT /user_addresses/1
   # PATCH/PUT /user_addresses/1.json
   def update
-    respond_to do |format|
-      if @user_address.update(user_address_params)
-        format.html { redirect_to @user_address, notice: 'User address was successfully updated.' }
-        format.json { render :show, status: :ok, location: @user_address }
-      else
-        format.html { render :edit }
-        format.json { render json: @user_address.errors, status: :unprocessable_entity }
-      end
-    end
-  end
+    UserAddress.transaction do
+      @user_address.update({:primary => false})
+      respond_to do |format|
+        new_user_address = current_user.user_addresses.new(user_address_params)
+        new_user_address[:primary] = true
 
-  # DELETE /user_addresses/1
-  # DELETE /user_addresses/1.json
-  def destroy
-    @user_address.destroy
-    respond_to do |format|
-      format.html { redirect_to user_addresses_url, notice: 'User address was successfully destroyed.' }
-      format.json { head :no_content }
+        if new_user_address.save
+          format.html { redirect_to activities_path, notice: 'User address was successfully updated.' }
+          format.json { render :show, status: :ok, location: @user_address }
+        else
+          format.html { render :edit }
+          format.json { render json: @user_address.errors, status: :unprocessable_entity }
+        end
+      end
     end
   end
 
@@ -69,6 +67,6 @@ class UserAddressesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_address_params
-      params.require(:user_address).permit(:address_line, :address_line_2, :zip_code, :city, :state, :country, :user_id, :primary)
+      params.require(:user_address).permit(:address_line, :address_line_2, :zip_code, :city, :state, :country)
     end
 end
