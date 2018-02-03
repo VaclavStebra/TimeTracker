@@ -26,7 +26,9 @@ class ActivitiesController < ApplicationController
   # POST /activities.json
   def create
     params = activity_params
-    params[:customer_id] = Project.find(params[:project_id]).customer.id
+    if params[:project_id]
+      params[:customer_id] = Project.find(params[:project_id]).customer.id
+    end
     @activity = @current_user.activities.new(params)
 
     respond_to do |format|
