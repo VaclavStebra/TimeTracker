@@ -23,6 +23,9 @@ class InvoicesController < ApplicationController
         @customers.push(customer)
       end
     end
+    if @customers.length == 0
+      redirect_to invoices_url, alert: 'No activities to associate with the invoice'
+    end
   end
 
   # POST /invoices
