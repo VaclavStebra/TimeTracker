@@ -1,3 +1,13 @@
+class TimeValidator < ActiveModel::Validator
+  def validate(record)
+    if !record.end_time.nil? && !record.start_time.nil?
+      if record.end_time <= record.start_time
+        record.errors[:base] << "End time must be after start time"
+      end
+    end
+  end
+end
+
 class Activity < ApplicationRecord
   belongs_to :project
   belongs_to :user
@@ -8,4 +18,5 @@ class Activity < ApplicationRecord
   validates :project, presence: true
   validates :start_time, presence: true
   validates :end_time, presence: true
+  validates_with TimeValidator
 end
