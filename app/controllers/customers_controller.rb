@@ -29,8 +29,16 @@ class CustomersController < ApplicationController
 
     respond_to do |format|
       if @customer.save
-        format.html { redirect_to @customer, notice: 'Customer was successfully created.' }
-        format.json { render :show, status: :created, location: @customer }
+        @customer_address = @customer.customer_addresses.new(customer_params)
+        @customer_address[:primary] = true
+        if @customer_address.save
+          format.html { redirect_to @customer, notice: 'Customer was successfully created.' }
+          format.json { render :show, status: :created, location: @customer }
+        else
+          format.html { render :new }
+          format.json { render json: @customer.errors, status: :unprocessable_entity }
+        end
+
       else
         format.html { render :new }
         format.json { render json: @customer.errors, status: :unprocessable_entity }
@@ -41,8 +49,14 @@ class CustomersController < ApplicationController
   # PATCH/PUT /customers/1
   # PATCH/PUT /customers/1.json
   def update
+    @customer_address = CustomerAddress.where(:customer_id => @customer[:id], :primary => true)[0]
+    @customer_address.update(:primary => false)
+
     respond_to do |format|
       if @customer.update(customer_params)
+        @customer_address = @customer.customer_addresses.new(customer_params)
+        @customer_address[:primary] = true
+        @customer_address.save
         format.html { redirect_to @customer, notice: 'Customer was successfully updated.' }
         format.json { render :show, status: :ok, location: @customer }
       else
@@ -75,6 +89,6 @@ class CustomersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def customer_params
-      params.require(:customer).permit(:name, :address_line, :address_line_2, :zip_code, :city, :state, :country)
+      params.require(:customer).permit(:name, :address_line, :address_line_2, :zip_code, :city, :state, :country, :primary)
     end
 end

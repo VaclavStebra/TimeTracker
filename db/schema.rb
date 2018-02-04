@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180203173204) do
+ActiveRecord::Schema.define(version: 20180204171845) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,6 +27,21 @@ ActiveRecord::Schema.define(version: 20180203173204) do
     t.index ["customer_id"], name: "index_activities_on_customer_id"
     t.index ["project_id"], name: "index_activities_on_project_id"
     t.index ["user_id"], name: "index_activities_on_user_id"
+  end
+
+  create_table "customer_addresses", force: :cascade do |t|
+    t.string "name"
+    t.string "address_line"
+    t.string "address_line_2"
+    t.string "zip_code"
+    t.string "city"
+    t.string "state"
+    t.string "country"
+    t.bigint "customer_id"
+    t.boolean "primary"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["customer_id"], name: "index_customer_addresses_on_customer_id"
   end
 
   create_table "customers", force: :cascade do |t|
@@ -78,6 +93,7 @@ ActiveRecord::Schema.define(version: 20180203173204) do
   add_foreign_key "activities", "customers"
   add_foreign_key "activities", "projects"
   add_foreign_key "activities", "users"
+  add_foreign_key "customer_addresses", "customers"
   add_foreign_key "customers", "users"
   add_foreign_key "projects", "customers"
   add_foreign_key "projects", "users"
