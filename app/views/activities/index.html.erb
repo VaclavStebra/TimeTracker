@@ -10,7 +10,7 @@
   <thead>
     <tr>
       <th>Description</th>
-      <th>Project</th>
+      <th>Customer | Project</th>
       <th>Start time</th>
       <th>End time</th>
       <th colspan="2"></th>
@@ -21,7 +21,7 @@
     <% @activities.each do |activity| %>
       <tr>
         <td><%= activity.description %></td>
-        <td><%= activity.project.name %></td>
+        <td><%= activity.customer.name %> | <%= activity.project.name %></td>
         <td><%= activity.start_time %></td>
         <td><%= activity.end_time %></td>
         <% if activity.invoice.nil? %>
