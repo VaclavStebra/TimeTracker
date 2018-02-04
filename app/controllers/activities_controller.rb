@@ -59,10 +59,19 @@ class ActivitiesController < ApplicationController
   # DELETE /activities/1
   # DELETE /activities/1.json
   def destroy
-    @activity.destroy
-    respond_to do |format|
-      format.html { redirect_to activities_url, notice: 'Activity was successfully destroyed.' }
-      format.json { head :no_content }
+    if @activity.invoice.nil?
+      @activity.destroy
+      respond_to do |format|
+        format.html { redirect_to activities_url, notice: 'Activity was successfully destroyed.' }
+        format.json { head :no_content }
+      end
+    else
+      message = 'Cannot delete activity included in invoice!'
+      respond_to do |format|
+        format.html { redirect_to activities_path, alert: message }
+        format.json { render json: { :message => message}, status: :unprocessable_entity}
+      end
+
     end
   end
 

@@ -1,0 +1,46 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>User address:</strong><br>
+  <%= @invoice.user_address.address_line %><br>
+  <% if !@invoice.user_address.address_line_2.empty? %>
+    <%= @invoice.user_address.address_line_2 %><br>
+  <% end %>
+  <%= @invoice.user_address.zip_code %>, <%= @invoice.user_address.city %><br>
+  <% if !@invoice.user_address.state.empty? %>
+    <%= @invoice.user_address.state %>,
+  <% end %>
+  <%= @invoice.user_address.country %>
+</p>
+
+<p>
+  <strong>Customer address:</strong><br>
+  <%= @invoice.customer_address.address_line %><br>
+  <% if !@invoice.customer_address.address_line_2.empty? %>
+    <%= @invoice.customer_address.address_line_2 %><br>
+  <% end %>
+  <%= @invoice.customer_address.zip_code %>, <%= @invoice.customer_address.city %><br>
+  <% if !@invoice.customer_address.state.empty? %>
+    <%= @invoice.customer_address.state %>,
+  <% end %>
+  <%= @invoice.customer_address.country %>
+</p>
+
+<p>
+  <strong>Date:</strong>
+  <%= @invoice.date %>
+</p>
+
+<p>
+  <strong>Total cost:</strong>
+  $ <%= @invoice.total_cost %>
+</p>
+
+<h1>Activities</h1>
+<% @invoice.activities.each do |activity| %>
+  <strong><%= activity.description %></strong> <%= activity.start_time %> - <%= activity.end_time %><br>
+<% end %>
+
+<br>
+
+<%= link_to 'Back', invoices_path %>

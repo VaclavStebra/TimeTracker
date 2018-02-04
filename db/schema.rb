@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180204171845) do
+ActiveRecord::Schema.define(version: 20180204185102) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,7 +24,9 @@ ActiveRecord::Schema.define(version: 20180204171845) do
     t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.bigint "customer_id"
+    t.bigint "invoice_id"
     t.index ["customer_id"], name: "index_activities_on_customer_id"
+    t.index ["invoice_id"], name: "index_activities_on_invoice_id"
     t.index ["project_id"], name: "index_activities_on_project_id"
     t.index ["user_id"], name: "index_activities_on_user_id"
   end
@@ -56,6 +58,21 @@ ActiveRecord::Schema.define(version: 20180204171845) do
     t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.index ["user_id"], name: "index_customers_on_user_id"
+  end
+
+  create_table "invoices", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "user_address_id"
+    t.bigint "customer_address_id"
+    t.datetime "date"
+    t.integer "total_cost"
+    t.bigint "customer_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["customer_address_id"], name: "index_invoices_on_customer_address_id"
+    t.index ["customer_id"], name: "index_invoices_on_customer_id"
+    t.index ["user_address_id"], name: "index_invoices_on_user_address_id"
+    t.index ["user_id"], name: "index_invoices_on_user_id"
   end
 
   create_table "projects", force: :cascade do |t|
@@ -91,10 +108,15 @@ ActiveRecord::Schema.define(version: 20180204171845) do
   end
 
   add_foreign_key "activities", "customers"
+  add_foreign_key "activities", "invoices"
   add_foreign_key "activities", "projects"
   add_foreign_key "activities", "users"
   add_foreign_key "customer_addresses", "customers"
   add_foreign_key "customers", "users"
+  add_foreign_key "invoices", "customer_addresses"
+  add_foreign_key "invoices", "customers"
+  add_foreign_key "invoices", "user_addresses"
+  add_foreign_key "invoices", "users"
   add_foreign_key "projects", "customers"
   add_foreign_key "projects", "users"
   add_foreign_key "user_addresses", "users"

@@ -3,6 +3,7 @@ class Customer < ApplicationRecord
   has_many :projects, dependent: :restrict_with_error
   has_many :activities, dependent: :restrict_with_error
   has_many :customer_addresses, dependent: :nullify
+  has_many :invoices, dependent: :nullify
 
   validates :name, presence: true
   validates :address_line, presence: true

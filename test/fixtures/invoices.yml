@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  user_address: one
+  customer_address: one
+  date: 2018-02-04 18:14:34
+  total_cost: 1
+  customer: one
+
+two:
+  user: two
+  user_address: two
+  customer_address: two
+  date: 2018-02-04 18:14:34
+  total_cost: 1
+  customer: two
