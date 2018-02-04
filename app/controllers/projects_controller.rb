@@ -1,16 +1,11 @@
 class ProjectsController < ApplicationController
-  before_action :set_project, only: [:show, :edit, :update, :destroy]
+  before_action :set_project, only: [:edit, :update, :destroy]
   before_action :authorize
 
   # GET /projects
   # GET /projects.json
   def index
     @projects = @current_user.projects
-  end
-
-  # GET /projects/1
-  # GET /projects/1.json
-  def show
   end
 
   # GET /projects/new
@@ -29,8 +24,8 @@ class ProjectsController < ApplicationController
 
     respond_to do |format|
       if @project.save
-        format.html { redirect_to @project, notice: 'Project was successfully created.' }
-        format.json { render :show, status: :created, location: @project }
+        format.html { redirect_to projects_url, notice: 'Project was successfully created.' }
+        format.json { render :index, status: :created, location: @project }
       else
         format.html { render :new }
         format.json { render json: @project.errors, status: :unprocessable_entity }
@@ -43,8 +38,8 @@ class ProjectsController < ApplicationController
   def update
     respond_to do |format|
       if @project.update(project_params)
-        format.html { redirect_to @project, notice: 'Project was successfully updated.' }
-        format.json { render :show, status: :ok, location: @project }
+        format.html { redirect_to projects_url, notice: 'Project was successfully updated.' }
+        format.json { render :index, status: :ok, location: @project }
       else
         format.html { render :edit }
         format.json { render json: @project.errors, status: :unprocessable_entity }

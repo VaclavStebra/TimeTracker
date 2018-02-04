@@ -1,16 +1,11 @@
 class CustomersController < ApplicationController
-  before_action :set_customer, only: [:show, :edit, :update, :destroy]
+  before_action :set_customer, only: [:edit, :update, :destroy]
   before_action :authorize
 
   # GET /customers
   # GET /customers.json
   def index
     @customers = @current_user.customers
-  end
-
-  # GET /customers/1
-  # GET /customers/1.json
-  def show
   end
 
   # GET /customers/new
@@ -32,8 +27,8 @@ class CustomersController < ApplicationController
         @customer_address = @customer.customer_addresses.new(customer_params)
         @customer_address[:primary] = true
         if @customer_address.save
-          format.html { redirect_to @customer, notice: 'Customer was successfully created.' }
-          format.json { render :show, status: :created, location: @customer }
+          format.html { redirect_to customers_url, notice: 'Customer was successfully created.' }
+          format.json { render :index, status: :created, location: @customer }
         else
           format.html { render :new }
           format.json { render json: @customer.errors, status: :unprocessable_entity }
@@ -57,8 +52,8 @@ class CustomersController < ApplicationController
         @customer_address = @customer.customer_addresses.new(customer_params)
         @customer_address[:primary] = true
         @customer_address.save
-        format.html { redirect_to @customer, notice: 'Customer was successfully updated.' }
-        format.json { render :show, status: :ok, location: @customer }
+        format.html { redirect_to customers_url, notice: 'Customer was successfully updated.' }
+        format.json { render :index, status: :ok, location: @customer }
       else
         format.html { render :edit }
         format.json { render json: @customer.errors, status: :unprocessable_entity }

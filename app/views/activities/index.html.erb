@@ -20,7 +20,6 @@
         <td><%= activity.project.name %></td>
         <td><%= activity.start_time %></td>
         <td><%= activity.end_time %></td>
-        <td><%= link_to 'Show', activity %></td>
         <% if activity.invoice.nil? %>
           <td><%= link_to 'Edit', edit_activity_path(activity) %></td>
         <% else %>

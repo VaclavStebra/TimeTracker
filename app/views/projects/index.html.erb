@@ -8,7 +8,7 @@
       <th>Name</th>
       <th>Customer</th>
       <th>Rate</th>
-      <th colspan="3"></th>
+      <th colspan="2"></th>
     </tr>
   </thead>
 
@@ -18,9 +18,12 @@
         <td><%= project.name %></td>
         <td><%= project.customer.name %></td>
         <td>$<%= project.rate %></td>
-        <td><%= link_to 'Show', project %></td>
         <td><%= link_to 'Edit', edit_project_path(project) %></td>
-        <td><%= link_to 'Destroy', project, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% if project.activities.empty? %>
+          <td><%= link_to 'Destroy', project, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% else %>
+          <td></td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>

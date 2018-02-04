@@ -1,16 +1,11 @@
 class ActivitiesController < ApplicationController
-  before_action :set_activity, only: [:show, :edit, :update, :destroy]
+  before_action :set_activity, only: [:edit, :update, :destroy]
   before_action :authorize
 
   # GET /activities
   # GET /activities.json
   def index
     @activities = @current_user.activities.order(:start_time)
-  end
-
-  # GET /activities/1
-  # GET /activities/1.json
-  def show
   end
 
   # GET /activities/new
@@ -33,8 +28,8 @@ class ActivitiesController < ApplicationController
 
     respond_to do |format|
       if @activity.save
-        format.html { redirect_to @activity, notice: 'Activity was successfully created.' }
-        format.json { render :show, status: :created, location: @activity }
+        format.html { redirect_to activities_url, notice: 'Activity was successfully created.' }
+        format.json { render :index, status: :created, location: @activity }
       else
         format.html { render :new }
         format.json { render json: @activity.errors, status: :unprocessable_entity }
@@ -47,8 +42,8 @@ class ActivitiesController < ApplicationController
   def update
     respond_to do |format|
       if @activity.update(activity_params)
-        format.html { redirect_to @activity, notice: 'Activity was successfully updated.' }
-        format.json { render :show, status: :ok, location: @activity }
+        format.html { redirect_to activities_url, notice: 'Activity was successfully updated.' }
+        format.json { render :index, status: :ok, location: @activity }
       else
         format.html { render :edit }
         format.json { render json: @activity.errors, status: :unprocessable_entity }
@@ -68,7 +63,7 @@ class ActivitiesController < ApplicationController
     else
       message = 'Cannot delete activity included in invoice!'
       respond_to do |format|
-        format.html { redirect_to activities_path, alert: message }
+        format.html { redirect_to activities_url, alert: message }
         format.json { render json: { :message => message}, status: :unprocessable_entity}
       end
 
