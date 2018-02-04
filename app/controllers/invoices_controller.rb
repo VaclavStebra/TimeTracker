@@ -16,6 +16,13 @@ class InvoicesController < ApplicationController
   # GET /invoices/new
   def new
     @invoice = Invoice.new
+    @customers = []
+    user_customers = @current_user.customers.order(:name)
+    user_customers.each do |customer|
+      if customer.activities.where(:invoice_id => nil).length > 0
+        @customers.push(customer)
+      end
+    end
   end
 
   # POST /invoices

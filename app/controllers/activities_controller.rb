@@ -40,8 +40,10 @@ class ActivitiesController < ApplicationController
   # PATCH/PUT /activities/1
   # PATCH/PUT /activities/1.json
   def update
+    params = activity_params
+    params[:customer_id] = Project.find(params[:project_id])[:customer_id]
     respond_to do |format|
-      if @activity.update(activity_params)
+      if @activity.update(params)
         format.html { redirect_to activities_url, notice: 'Activity was successfully updated.' }
         format.json { render :index, status: :ok, location: @activity }
       else

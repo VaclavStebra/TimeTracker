@@ -15,7 +15,7 @@
     <%= form.label :customer_id %>
     <%= form.select :customer_id,
                     options_from_collection_for_select(
-                        current_user.customers.order(:name).pluck(:id, :name),
+                        @customers.pluck(:id, :name),
                         :first, :last,
                         invoice.customer.try(:id)
                     ) %>
