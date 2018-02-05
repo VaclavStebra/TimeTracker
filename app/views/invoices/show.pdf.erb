@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PDF</title>
+</head>
+<body>
+<h1>Invoice for <%= @invoice.customer[:name] %> </h1>
+
+<p><%= @invoice[:date] %></p>
+
+<h3>Bill to</h3>
+<p>
+  <%= @invoice.customer_address[:name] %><br>
+  <%= @invoice.customer_address.address_line %><br>
+  <% if !@invoice.customer_address.address_line_2.empty? %>
+    <%= @invoice.customer_address.address_line_2 %><br>
+  <% end %>
+  <%= @invoice.customer_address.zip_code %>, <%= @invoice.customer_address.city %><br>
+  <% if !@invoice.customer_address.state.empty? %>
+    <%= @invoice.customer_address.state %>,
+  <% end %>
+  <%= @invoice.customer_address.country %>
+</p>
+
+
+<h3>Supplier</h3>
+<p>
+  <%= @invoice.user[:email] %><br>
+  <%= @invoice.user_address.address_line %><br>
+  <% if !@invoice.user_address.address_line_2.empty? %>
+    <%= @invoice.user_address.address_line_2 %><br>
+  <% end %>
+  <%= @invoice.user_address.zip_code %>, <%= @invoice.user_address.city %><br>
+  <% if !@invoice.user_address.state.empty? %>
+    <%= @invoice.user_address.state %>,
+  <% end %>
+  <%= @invoice.user_address.country %>
+</p>
+
+<h3>Items</h3>
+
+<table border="1">
+  <thead>
+  <tr>
+    <th>Description</th>
+    <th>Start</th>
+    <th>End</th>
+    <th>Duration</th>
+    <th>Rate</th>
+    <th>Cost</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @invoice.activities.each do |activity| %>
+    <% duration = (activity.end_time.to_time - activity.start_time.to_time) / 60 / 60 %>
+    <tr>
+      <td><%= activity.description %></td>
+      <td><%= activity.start_time %></td>
+      <td><%= activity.end_time %></td>
+      <td><%= duration %> hours</td>
+      <td>$ <%= activity.rate %></td>
+      <td>$ <%= (duration * activity.rate).round %></td>
+    </tr>
+  <% end %>
+  <tr>
+    <th colspan="5">Total</th>
+    <td>$ <%= @invoice.total_cost %></td>
+  </tr>
+  </tbody>
+</table>
+
+</body>
+</html>
