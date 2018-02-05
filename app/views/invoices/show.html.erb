@@ -38,7 +38,7 @@
 
 <h1>Activities</h1>
 <% @invoice.activities.each do |activity| %>
-  <strong><%= activity.description %></strong> <%= activity.start_time %> - <%= activity.end_time %><br>
+  <strong><%= activity.description %></strong> | <%= activity.start_time %> - <%= activity.end_time %> | $ <%= activity.rate %> per hour<br>
 <% end %>
 
 <br>

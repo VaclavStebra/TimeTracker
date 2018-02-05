@@ -26,6 +26,9 @@ class InvoicesController < ApplicationController
     if @customers.length == 0
       redirect_to invoices_url, alert: 'No activities to associate with the invoice'
     end
+    if @current_user.user_addresses.where(:primary => true).length == 0
+      redirect_to invoices_url, alert: 'No address! Please fill address in settings first'
+    end
   end
 
   # POST /invoices
@@ -48,7 +51,7 @@ class InvoicesController < ApplicationController
     respond_to do |format|
       if @invoice.save
         activities.each do |activity|
-          activity.update(:invoice_id => @invoice[:id])
+          activity.update(:invoice_id => @invoice[:id], :rate => activity.project[:rate])
         end
         format.html { redirect_to @invoice, notice: 'Invoice was successfully created.' }
         format.json { render :show, status: :created, location: @invoice }
