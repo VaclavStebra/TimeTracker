@@ -32,6 +32,7 @@ class InvoicesController < ApplicationController
     end
     if @customers.length == 0
       redirect_to invoices_url, alert: 'No activities to associate with the invoice'
+      return
     end
     if @current_user.user_addresses.where(:primary => true).length == 0
       redirect_to invoices_url, alert: 'No address! Please fill address in settings first'
